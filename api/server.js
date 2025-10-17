@@ -5,10 +5,12 @@ import { connectDb } from "../api/lib/db.js";
 import mountRoutes from "./routes/index.js";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 const PORT = ENV.PORT;
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser()); //gelen isteklerdeki cookie'leri okumak icin
 app.use(helmet());
@@ -19,5 +21,10 @@ mountRoutes(app);
 connectDb().then(() => {
   app.listen(PORT, () => {
     console.log(`Server has been started in ${PORT}`);
+    try {
+      console.log("process exit listeners count:", process.listeners("exit").length);
+    } catch (err) {
+      console.log("Could not read process listeners:", err.message);
+    }
   });
 });

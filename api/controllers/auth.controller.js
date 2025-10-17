@@ -112,4 +112,18 @@ export const refreshToken = async (req, res) => {
 };
 
 //TODO: Kullanici profil bilgilerini dondur
-export const getProfile = async (req, res) => {};
+export const getProfile = async (req, res) => {
+  const userId = req.user._id;
+
+  try {
+    const user = await User.findById(userId).select("name email role");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(sanitizeUser(user));
+  } catch (error) {
+    console.log("Error in getProfile: ", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
