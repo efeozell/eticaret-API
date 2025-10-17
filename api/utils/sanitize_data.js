@@ -6,3 +6,13 @@ export const sanitizeUser = function (user) {
     role: user.role,
   };
 };
+
+export const sanitizeProduct = function (product) {
+  return {
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    image: product.image,
+    category: product.category,
+  };
+};
