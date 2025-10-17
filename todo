@@ -1,0 +1,18 @@
+
+Server ayaga kaldirildi
+
+auth routes olusturuldu
+
+User modeli olusturuldu
+
+signup validator olusturuldu ve endpointin oncesine eklendi
+
+Signup endpointi olusturuldu
+
+logout endpointi olusturuldu
+
+login endpointi olusturuldu 
+
+(logout'da token redisten siliniyor, loginde ise redis'e kaydediliyor & )
+
+refreshtoken endpointi olusturuldu eger kullanicinin refreshtokeni gecerliyse accessToken olusturup cookie olarak geri gonderiliyor.
