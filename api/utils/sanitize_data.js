@@ -16,3 +16,9 @@ export const sanitizeProduct = function (product) {
     category: product.category,
   };
 };
+
+export const sanitizeCart = function (cart) {
+  return {
+    cartItems: cart.cartItems,
+  };
+};
