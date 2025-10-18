@@ -18,7 +18,14 @@ export const sanitizeProduct = function (product) {
 };
 
 export const sanitizeCart = function (cart) {
+  if (!cart || !cart.cartItems) {
+    return { cartItems: [] };
+  }
+
   return {
-    cartItems: cart.cartItems,
+    cartItems: cart.cartItems.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    })),
   };
 };
