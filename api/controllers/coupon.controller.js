@@ -149,6 +149,12 @@ export const applyCoupon = async (req, res) => {
       totalPriceAfterDiscount = cart.totalCartPrice - discountPrice;
     } else if (coupon.discountType === "fixed") {
       totalPriceAfterDiscount = cart.totalCartPrice - coupon.discountPercentage;
+    } else {
+      return res.status(400).json({ message: "Invalid discount type" });
+    }
+
+    if (totalPriceAfterDiscount < 0) {
+      totalPriceAfterDiscount = 0;
     }
 
     const updatedCart = await Cart.findOneAndUpdate(
@@ -161,5 +167,8 @@ export const applyCoupon = async (req, res) => {
     );
 
     res.status(200).json({ message: "Coupon used successfully", cart: updatedCart });
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error in applyCoupon: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
