@@ -18,7 +18,7 @@ export const sanitizeProduct = function (product) {
 };
 
 export const sanitizeCart = function (cart) {
-  if (!cart || !cart.cartItems) {
+  if (!cart || !cart.cartItems || !Array.isArray(cart.cartItems)) {
     return { cartItems: [] };
   }
 

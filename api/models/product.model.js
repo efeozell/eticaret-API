@@ -24,6 +24,7 @@ const productSchema = new mongoose.Schema(
       required: [false, "Product image is required"],
     },
     category: {
+      //TODO: category modeli olusturup, category id'sine gore getCategoryById'yi tekrar dene
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       required: [false, "Product category is required"],

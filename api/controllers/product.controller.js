@@ -2,6 +2,7 @@ import Product from "../models/product.model.js";
 import { redis } from "../lib/redis.js";
 import cloudinary from "../lib/cloudinary.js";
 import { sanitizeProduct } from "../utils/sanitize_data.js";
+import Category from "../models/category.model.js";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -50,16 +51,14 @@ export const getFeaturedProducts = async (req, res) => {
     //
     try {
       const jsonString = JSON.stringify(featuredProducts);
-      // Only cache if we got a valid JSON array string
+      // Eger dogru json formatindaysa redise aliyoruz
       if (jsonString && jsonString.startsWith("[")) {
         await redis.set("featured_products", jsonString, { ex: 60 * 60 });
       }
     } catch (serializeError) {
       console.log("Error caching featured products:", serializeError);
-      // Continue without caching if serialization fails
     }
 
-    // Always return the MongoDB data if we got here
     res.json(featuredProducts);
   } catch (error) {
     console.log("Error in getFeaturedProducts: ", error);
@@ -145,22 +144,31 @@ export const updateProduct = async (req, res) => {
         isFeatured,
       });
 
-      if (!updateProduct) {
+      if (!updatedProduct) {
         return res.status(404).json({ message: "Product not found" });
       }
 
-      res.status(200).json({ message: "Product updated successfully" }, updateProduct);
+      res.status(200).json({ message: "Product updated successfully" }, updatedProduct);
     } catch (error) {
       console.log("Error in updateProducts: ", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
 };
+
 export const getRecommendedProducts = async (req, res) => {
   try {
     const products = await Product.aggregate([
+      //rastgele secim $sample
       { $sample: { size: 3 } },
+      //quantitysi 0'dan olanlari bulmak icin
       {
+        $match: {
+          quantity: { $gt: 0 },
+        },
+      },
+      {
+        //$project sekillendirme ve paketleme 1'ler ise dahil etmek icin
         $project: {
           _id: 1,
           name: 1,
@@ -181,7 +189,7 @@ export const getProductsByCategory = async (req, res) => {
   const { category } = req.params;
 
   try {
-    const products = await Product.find({ category });
+    const products = await Product.find({ category: category });
     if (!products) {
       return res.status(400).json({ message: "Category not found" });
     }
