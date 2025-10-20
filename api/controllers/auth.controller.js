@@ -8,6 +8,12 @@ import { ENV } from "../config/env.js";
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
 
+  const isEmailExist = await User.findOne(email);
+
+  if (isEmailExist) {
+    return res.status(400).json({ message: "Email already exist" });
+  }
+
   try {
     const user = await User.create({
       name,
