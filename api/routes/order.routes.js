@@ -13,10 +13,10 @@ const router = express.Router();
 
 //CUSTOMER ROUTES
 router.post("/checkout-session/:cartId", protectRoute, createCheckoutSession);
-router.get("/", protectRoute, findSpesificOrderByUser);
+router.get("/my-orders", protectRoute, findSpesificOrderByUser);
 
 //ADMIN ROUTES
-router.get("/", protectRoute, adminRoute, findAllOrders);
+router.get("/all", protectRoute, adminRoute, findAllOrders);
 router.get("/:id", protectRoute, adminRoute, findSpesificOrder);
 router.get("/status/:status", protectRoute, adminRoute, findOrdersByStatus);
 router.patch("/:id", protectRoute, adminRoute, updateOrderStatus);

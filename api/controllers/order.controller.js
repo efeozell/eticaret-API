@@ -14,12 +14,12 @@ export const createCheckoutSession = async (req, res) => {
       select: "name price image",
     });
 
-    if (!cart.user.equals(req.user._id)) {
-      return res.status(400).json({ message: "You do not own this cart" });
-    }
-
     if (!cart) {
       return res.status(404).json({ messsage: `There is no such cart with id ${req.params.cartId}` });
+    }
+
+    if (!cart.user.equals(req.user._id)) {
+      return res.status(400).json({ message: "You do not own this cart" });
     }
 
     // const cartPrice = cart.totalPriceAfterDiscount ?? cart.totalCartPrice;
@@ -35,8 +35,8 @@ export const createCheckoutSession = async (req, res) => {
       }
     }
 
-    if (stripeCouponId && stripeCouponId.isActive && stripeCouponId.usageCount > stripeCouponId.usageLimit) {
-      return res.status(400).json({ message: `This coupon limit excteeding ${stripeCouponId}` });
+    if (couponFromDB.isActive && couponFromDB.usageCount > couponFromDB.usageLimit) {
+      return res.status(400).json({ message: `This coupon limit excteeding ${cart.appliedCoupon}` });
     }
 
     const linesItems = cart.cartItems
@@ -144,12 +144,19 @@ const createCardOrder = async (session) => {
       const couponCode = cart.appliedCoupon;
 
       const updatedCoupon = await Coupon.findOneAndUpdate(
-        { code: couponCode },
+        {
+          code: couponCode,
+          $or: [{ usageLimit: null }, { $expr: { $lt: ["$usageCount", "$usageLimit"] } }],
+        },
         { $inc: { usageCount: 1 } },
         { new: true, session: dbSession }
       );
 
-      if (updatedCoupon && updatedCoupon.usageLimit && updatedCoupon.usageCount > updatedCoupon.usageLimit) {
+      if (!updatedCoupon) {
+        throw new Error(`Coupon limit reached or coupon invalid for code ${couponCode}`);
+      }
+
+      if (updatedCoupon && updatedCoupon.usageLimit && updatedCoupon.usageCount >= updatedCoupon.usageLimit) {
         throw new Error(`Coupon usage limit exceeeded for code: ${couponCode}`);
       }
 
@@ -195,17 +202,14 @@ export const webhookCheckout = async (req, res) => {
   } catch (error) {
     console.error(`❌ Stripe Webhook Signature verification failed: ${error.message}`);
     console.error(`Received sig:  ${sig}`);
-    return res.status(400).send(`Webhook Error: ${error.message})`);
+    return res.status(400).send(`Webhook Error: ${error.message}`);
   }
 
   try {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
-      try {
-        await createCardOrder(session);
-      } catch (orderError) {
-        console.error(`Failed to create order for session: ${session.id}`, orderError);
-      }
+
+      await createCardOrder(session);
     } else {
       console.log(`Received unhandled event type: ${event.type}`);
     }
@@ -220,10 +224,10 @@ export const webhookCheckout = async (req, res) => {
 
 export const findAllOrders = async (req, res) => {
   try {
-    const orders = await Order.findOne({});
+    const orders = await Order.find({});
 
     if (!orders) {
-      return res.status(400).json({ message: "Orders not found" });
+      return res.status(404).json({ message: "Orders not found" });
     }
 
     res.status(200).json(orders);
@@ -234,12 +238,12 @@ export const findAllOrders = async (req, res) => {
 };
 
 export const findSpesificOrderByUser = async (req, res) => {
-  const { id } = req.user._id;
+  const userId = req.user._id;
 
   try {
-    const order = await Order.findOne({ user: id });
+    const order = await Order.findOne({ user: userId });
 
-    if (!order) {
+    if (!order || order.length === 0) {
       return res.status(404).json({ message: "Orders cant found" });
     }
 
@@ -278,7 +282,7 @@ export const findOrdersByStatus = async (req, res) => {
     }
 
     const orders = await Order.findOne({ status: status });
-    if (!orders) {
+    if (!orders || orders.length === 0) {
       return res.status(404).json({ message: "No product was found in this status" });
     }
 
