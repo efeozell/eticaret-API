@@ -23,10 +23,6 @@ export const createCategory = async (req, res) => {
       slug,
     });
 
-    if (!newCategory) {
-      return res.status(400).json({ message: "Error created a new category" });
-    }
-
     res.status(201).json({
       message: "Category created successfully",
       newCategory,

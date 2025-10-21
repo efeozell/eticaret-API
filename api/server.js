@@ -6,9 +6,12 @@ import mountRoutes from "./routes/index.js";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { webhookCheckout } from "./controllers/order.controller.js";
 
 const app = express();
 const PORT = ENV.PORT;
+
+app.post("/webhook-checkout", express.raw({ type: "application/json" }), webhookCheckout);
 
 app.use(cors());
 app.use(express.json());

@@ -1,8 +1,17 @@
 import Coupon from "../models/coupon.model.js";
 import Cart from "../models/cart.model.js";
+import { stripe } from "../lib/stripe.js";
 
 export const createCoupon = async (req, res) => {
-  const { code, discountPercentage, discountType, expirationDate, isActive } = req.body;
+  const { code, discountPercentage, discountType, expirationDate, isActive, usageLimit } = req.body;
+
+  const couponParams = {
+    duration: "once",
+    name: code,
+    ...(discountType === "percentage" ? { percent_off: discountPercentage } : { amount_off: discountPercentage }),
+  };
+
+  const stripeCoupon = await stripe.coupons.create(couponParams);
 
   try {
     const isCodeExist = await Coupon.findOne({ code });
@@ -10,15 +19,17 @@ export const createCoupon = async (req, res) => {
       res.status(400).json({ message: "Coupon already exist" });
     }
 
-    const newCode = await Coupon.create({
+    const newCoupon = await Coupon.create({
       code,
       discountPercentage,
       discountType,
       expirationDate,
+      usageLimit,
       isActive,
+      stripeCouponId: stripeCoupon.id,
     });
 
-    res.status(201).json({ message: "Coupon created successfully" }, newCode);
+    res.status(201).json({ message: "Coupon created successfully" }, newCoupon);
   } catch (error) {
     console.log("Error in createCoupon: ", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -105,8 +116,6 @@ export const deleteCouponById = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-//TODO: Burada apply uygulanacak
 
 export const applyCoupon = async (req, res) => {
   try {
