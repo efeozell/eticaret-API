@@ -14,6 +14,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Product quantity is required"],
     },
+    sold: {
+      type: Number,
+      default: 0,
+    },
     price: {
       type: Number,
       min: [0, "Price cannot be negative"],

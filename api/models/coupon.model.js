@@ -20,6 +20,10 @@ const couponSchema = new mongoose.Schema(
       enum: ["percentage", "fixed"],
       required: true,
     },
+    stripeCouponId: {
+      type: String,
+      required: true,
+    },
     expirationDate: {
       type: Date,
       required: true,
