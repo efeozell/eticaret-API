@@ -12,7 +12,7 @@
 
   - JWT tabanlı kimlik doğrulama
   - Doğrulama kodu ile e-posta onayı
-  - Rol tabanlı erişim kontrolü (Admin, Manager, User)
+  - Rol tabanlı erişim kontrolü (Admin, Customer)
 
 - 🛍️ **Ürün & Kategori Gezintisi**:
 
@@ -58,7 +58,7 @@
 
 1. **Repoyu klonlayın**:
    ```bash
-   git clone https://github.com/Ahmad-Nour-Haidar/nodejs-ecommerce-api.git
+   git clone https://github.com/efeozell/eticaret-API
    ```
 2. **Projenin Ana dizine gidin**:
    ```bash

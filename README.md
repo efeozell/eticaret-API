@@ -66,7 +66,7 @@ integration.
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Ahmad-Nour-Haidar/nodejs-ecommerce-api.git
+   git clone https://github.com/efeozell/eticaret-API
    ```
 2. **Navigate to the project directory**:
    ```bash
