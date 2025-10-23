@@ -28,15 +28,16 @@ export const createCheckoutSession = async (req, res) => {
 
     let stripeCouponId = null;
 
+    let couponFromDB = null;
+
     if (cart.appliedCoupon) {
-      const couponFromDB = await Coupon.findOne({ code: cart.appliedCoupon });
+      couponFromDB = await Coupon.findOne({ code: cart.appliedCoupon });
       if (couponFromDB) {
         stripeCouponId = couponFromDB.stripeCouponId;
+        if (couponFromDB.isActive && couponFromDB.usageCount > couponFromDB.usageLimit) {
+          return res.status(400).json({ message: `This coupon limit excteeding ${cart.appliedCoupon}` });
+        }
       }
-    }
-
-    if (couponFromDB.isActive && couponFromDB.usageCount > couponFromDB.usageLimit) {
-      return res.status(400).json({ message: `This coupon limit excteeding ${cart.appliedCoupon}` });
     }
 
     const linesItems = cart.cartItems
