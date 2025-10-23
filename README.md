@@ -1,6 +1,6 @@
 <div align="right">
   <small>
-    <a href="../eticaret-API/api/docs/README_tr.md">TR Türkçe versiyon için tıklayınız</a>
+    <a href="https://github.com/efeozell/eticaret-API/blob/main/api/docs/README_tr.md">TR Türkçe versiyon için tıklayınız</a>
   </small>
 </div>
 
