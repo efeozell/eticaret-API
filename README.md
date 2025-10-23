@@ -16,6 +16,10 @@ integration.
 
 ## ✨ Features
 
+- 🚦**Rate Limiting & Bot detection with Arcjet**
+
+  - if you test my project navigate to arcjet.js file and change the LIVE mod to DRY_RUN
+
 - 🔐 **User Authentication & Authorization**:
 
   - JWT-based authentication.

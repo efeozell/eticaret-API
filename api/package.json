@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@arcjet/inspect": "^1.0.0-beta.13",
+    "@arcjet/node": "^1.0.0-beta.13",
     "@upstash/realtime": "^0.2.6-canary.2",
     "@upstash/redis": "^1.35.6",
     "bcryptjs": "^3.0.2",

@@ -8,6 +8,10 @@
 
 ## ✨ Özellikler
 
+- 🚦**Arcjet ile rate limiting ve bot taramasi**
+
+  - Eger projeyi test etmek isterseniz arcjet.js dosyasina girip LIVE kismini DRY_RUN olarak degistirin
+
 - 🔐 **Kullanıcı Kimlik Doğrulama & Yetkilendirme**:
 
   - JWT tabanlı kimlik doğrulama
