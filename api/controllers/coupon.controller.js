@@ -5,19 +5,19 @@ import { stripe } from "../lib/stripe.js";
 export const createCoupon = async (req, res) => {
   const { code, discountPercentage, discountType, expirationDate, isActive, usageLimit } = req.body;
 
-  const couponParams = {
-    duration: "once",
-    name: code,
-    ...(discountType === "percentage" ? { percent_off: discountPercentage } : { amount_off: discountPercentage }),
-  };
-
-  const stripeCoupon = await stripe.coupons.create(couponParams);
-
   try {
     const isCodeExist = await Coupon.findOne({ code });
     if (isCodeExist) {
       res.status(400).json({ message: "Coupon already exist" });
     }
+
+    const couponParams = {
+      duration: "once",
+      name: code,
+      ...(discountType === "percentage" ? { percent_off: discountPercentage } : { amount_off: discountPercentage }),
+    };
+
+    const stripeCoupon = await stripe.coupons.create(couponParams);
 
     const newCoupon = await Coupon.create({
       code,
@@ -162,7 +162,7 @@ export const applyCoupon = async (req, res) => {
       return res.status(400).json({ message: "Invalid discount type" });
     }
 
-    if (totalPriceAfterDiscount < 0) {
+    if (totalPriceAfterDiscount < 1) {
       totalPriceAfterDiscount = 0;
     }
 

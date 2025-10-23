@@ -196,7 +196,7 @@ export const updateCartItemQuantity = async (req, res) => {
   }
 
   try {
-    // Find cart
+    // Kullanicinin cartini buluyor
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
       return res.status(404).json({
@@ -205,7 +205,7 @@ export const updateCartItemQuantity = async (req, res) => {
       });
     }
 
-    // Find cart item
+    // Cartin icindeki cartItems icinden guncellenecek olan item i itemin idsi ile buluyurouz
     const index = cart.cartItems.findIndex((item) => item._id.toString() === req.params.itemId);
     if (index < 0) {
       return res.status(404).json({
@@ -214,7 +214,7 @@ export const updateCartItemQuantity = async (req, res) => {
       });
     }
 
-    // Get product and check stock
+    // Buldugumuz urunun idsini kullanarak Product semasindan buluyoruz
     const product = await Product.findById(cart.cartItems[index].product);
     if (!product) {
       return res.status(404).json({
