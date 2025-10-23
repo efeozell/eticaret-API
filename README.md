@@ -10,9 +10,9 @@ This is a fully functional E-Commerce backend API built using **Node.js**, desig
 as user authentication, role-based access, product management, and order processing with cash and Stripe payment
 integration.
 
-![App Screenshot](../eticaret-API/api/docs/endpoint1.png)
-![App Screenshot](../eticaret-API/api/docs/endpoint2.png)
-![App Screenshot](../eticaret-API/api/docs/stripe.png)
+![App Screenshot](https://github.com/efeozell/eticaret-API/blob/main/api/docs/endpoint1.png)
+![App Screenshot](https://github.com/efeozell/eticaret-API/blob/main/api/docs/endpoint2.png)
+![App Screenshot](https://github.com/efeozell/eticaret-API/blob/main/api/docs/stripe.png)
 
 ## ✨ Features
 

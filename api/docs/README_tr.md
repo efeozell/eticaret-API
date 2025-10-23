@@ -2,9 +2,9 @@
 
 **Node.js** kullanılarak geliştirilmiş, kullanıcı kimlik doğrulama, rol tabanlı erişim, ürün yönetimi ve nakit/Stripe ödeme entegrasyonlu sipariş işleme gibi özellikleri destekleyen tam fonksiyonel bir E-Ticaret backend API'sı.
 
-![App Screenshot](../docs/endpoint1.png)
-![App Screenshot](../docs/endpoint2.png)
-![App Screenshot](../docs/stripe.png)
+![App Screenshot](https://github.com/efeozell/eticaret-API/blob/main/api/docs/endpoint1.png)
+![App Screenshot](https://github.com/efeozell/eticaret-API/blob/main/api/docs/endpoint2.png)
+![App Screenshot](https://github.com/efeozell/eticaret-API/blob/main/api/docs/stripe.png)
 
 ## ✨ Özellikler
 
